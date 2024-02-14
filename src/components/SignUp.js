@@ -1,10 +1,12 @@
 import React, { useRef } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
 
     const email = useRef();
     const password = useRef();
     const confirmPassword = useRef();
+    const navigate = useNavigate();
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -31,6 +33,9 @@ const SignUp = () => {
 
                 console.log(data);
 
+                if(response.ok){
+                        navigate("/login")
+                }    
 
             }
 
@@ -46,7 +51,7 @@ const SignUp = () => {
         <div className='flex flex-col justify-center items-center '>
             <h2 className='text-2xl text-center font-bold' >Sign-Up</h2>
             <form className='flex flex-col ' onSubmit={submitHandler}>
-                <label>Name:
+                <label>E-mail:
                     <input type='email' ref={email} placeholder='enter your email' required />
                 </label>
                 <label>Password:
