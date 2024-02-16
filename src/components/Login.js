@@ -1,12 +1,13 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
+import {AuthContext } from '../store/Auth';
 
 const Login = () => {
 
     const email = useRef();
     const password = useRef();
     const navigate = useNavigate();
-
+    const authCtx = useContext(AuthContext);
 
     const submitHandler =(e)=>{
 
@@ -29,10 +30,12 @@ const Login = () => {
     
                     const data = await response.json();
     
-                    console.log(data);
+                    // console.log(data.idToken);
 
                     if(response.ok){
                         navigate("/dashboard")
+                        console.log(data.email,data.idToken)
+                       authCtx.login(data.email,data.idToken)
                     }
     
     
