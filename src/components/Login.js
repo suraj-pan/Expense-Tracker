@@ -49,6 +49,13 @@ const Login = () => {
             
 
     }
+
+    const forgetPasswordHandler =()=>{
+        navigate("/forgetPage")
+    }
+
+
+    
   return (
     <div>
       <h2>Login </h2>
@@ -59,8 +66,10 @@ const Login = () => {
         <label> Password
             <input type='password' ref={password} placeholder='Enter your password' required />
         </label>
+        <button type='button'onClick={forgetPasswordHandler} >forgot password?</button>
         <button type='submit'>Submit</button>
       </form>
+
     </div>
   )
 }
