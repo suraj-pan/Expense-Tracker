@@ -8,44 +8,74 @@ const Dashboard = () => {
     const description = useRef();
     const category = useRef();
     const [Data,setdata]= useState([]);
+    const [editingExpense,setEditingExpense] = useState(null);
     
     const completeHandler =()=>{
         navigate("/updateProfile")
     }
 
-    const submitHandler=(e)=>{
+    const submitHandler= async(e)=>{
         e.preventDefault();
-        const sendData = async(expenseAmount,expenseDescription,expenseCategory)=>{
-
-            console.log(expenseAmount,expenseAmount,expenseDescription)
+        if(editingExpense){
+            console.log(editingExpense)
+            const editData =async()=>{
                 try {
-                    const response = await fetch('https://expense-tracker-65763-default-rtdb.firebaseio.com/expense.json',{
-                        method:"POST",
+                    const response = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${editingExpense.id}.json`,{
+                        method:"PATCH",
                         headers:{
-                            "Content-Type":"application/json"
+                            "Content-Type": "application/json",
                         },
                         body:JSON.stringify({
-                            category:expenseCategory,
-                            description:expenseDescription,
-                            amount:expenseAmount
+                            category:category.current.value,
+                            amount:amount.current.value,
+                            description:description.current.value
                         })
-                    });
-
-                    if (!response.ok) {
-                      throw new Error('Failed to fetch expenses');
+                    })
+    
+                    if(!response.ok){
+                        alert("error in updating data");
                     }
-            
-                    const data = await response.json();
-                    console.log(data)
-                    getData()
+                    setEditingExpense(null);
+                    getData();
+    
                 } catch (error) {
-                    console.error("Error",error)
+                    console.error("Error",error);
                 }
+            }
+            editData(category,amount,description)
+        }else{
+            const sendData = async (expenseAmount,expenseDescription,expenseCategory)=>{
+
+                console.log(expenseAmount,expenseAmount,expenseDescription)
+                    try {
+                        const response = await fetch('https://expense-tracker-65763-default-rtdb.firebaseio.com/expense.json',{
+                            method:"POST",
+                            headers:{
+                                "Content-Type":"application/json"
+                            },
+                            body:JSON.stringify({
+                                category:expenseCategory,
+                                description:expenseDescription,
+                                amount:expenseAmount
+                            })
+                        });
+    
+                        if (!response.ok) {
+                          throw new Error('Failed to fetch expenses');
+                        }
+                
+                        const data = await response.json();
+                        console.log(data)
+                        getData()
+                    } catch (error) {
+                        console.error("Error",error)
+                    }
+            }
+            sendData(amount.current.value,description.current.value,category.current.value)
         }
-        sendData(amount.current.value,description.current.value,category.current.value)
         amount.current.value="";
         description.current.value ="";
-        category.current.value ="";
+        category.current.value ="food";
 
     }
 
@@ -68,7 +98,7 @@ const Dashboard = () => {
         getData()
     },[])
 
-    console.log(Data)
+    // console.log(Data)
 
     const deleteHandler = async (id)=>{
             console.log(id)
@@ -89,10 +119,12 @@ const Dashboard = () => {
 
     const editExpense =(expense)=>{
 
-        console.log(expense)
+        // console.log(expense)
         amount.current.value = expense.amount;
         description.current.value = expense.description;
         category.current.value= expense.category;
+
+        setEditingExpense(expense);
 
     }
 
