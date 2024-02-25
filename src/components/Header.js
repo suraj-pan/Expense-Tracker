@@ -3,24 +3,35 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../store/Auth'
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/AuthSlice';
+import { toggleTheme } from '../store/ThemeSlice';
+import { downloadexpenses } from '../store/ExpenseSlice';
+import { MdDarkMode } from "react-icons/md";
+import { FaCloudDownloadAlt } from "react-icons/fa";
+
 
 const Header = () => {
 
-  const authCtx = useContext(AuthContext);
+  // const authCtx = useContext(AuthContext);
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const token = useSelector((state)=>state.auth.token)
   const expenses = useSelector(state=>state.expenses.expenses);
   console.log(expenses)
   const totalExpenses = expenses.reduce((total,expense)=> total + Number(expense.expenseAmount) ,0)
-
-  console.log(token)
-
+  const darkMode = useSelector(state=>state.theme.darkMode)
 
   const logoutHandler =()=>{
     // authCtx.logout()
     dispatch(logout())
     navigate("/login");
+  }
+
+  const handleThemeMode =()=>{
+    dispatch(toggleTheme());
+  }
+
+  const handleDownloadexpenses =()=>{
+    dispatch(downloadexpenses());
   }
 
   
@@ -36,6 +47,9 @@ const Header = () => {
           <button>Activate Premium </button>
         )}
       {token && (  <div>
+
+        <button onClick={handleThemeMode} ><MdDarkMode /></button>
+        <button onClick={handleDownloadexpenses} ><FaCloudDownloadAlt /></button>
         <button onClick={logoutHandler} >logout</button>
         </div>)}
       </div>

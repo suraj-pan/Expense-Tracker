@@ -12,11 +12,10 @@ const Dashboard = () => {
     const [Data,setdata]= useState([]);
     const [editingExpense,setEditingExpense] = useState(null);
     const dispatch = useDispatch();
-    const expenses = useSelector(state=>state.expenses.expenses);
-    console.log(expenses)
-    const totalExpenses = expenses.reduce((total,expense)=> total + Number(expense.expenseAmount) ,0)
+  
 
-    console.log(totalExpenses)
+
+
     
     const completeHandler =()=>{
         navigate("/updateProfile")
@@ -152,7 +151,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className='flex pt-5 justify-center items-center mx-auto flex-col gap-2 bg-slate-200'>
+        <div className='flex pt-5 justify-center items-center mx-auto flex-col gap-2 '>
             <div>
                 <h2 className='text-3xl'>Welcome to the Board</h2>
             </div>
