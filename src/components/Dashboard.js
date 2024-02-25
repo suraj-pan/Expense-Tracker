@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import {addExpense,setExpense} from "../store/ExpenseSlice"
 
 const Dashboard = () => {
 
@@ -9,6 +11,12 @@ const Dashboard = () => {
     const category = useRef();
     const [Data,setdata]= useState([]);
     const [editingExpense,setEditingExpense] = useState(null);
+    const dispatch = useDispatch();
+    const expenses = useSelector(state=>state.expenses.expenses);
+    console.log(expenses)
+    const totalExpenses = expenses.reduce((total,expense)=> total + Number(expense.expenseAmount) ,0)
+
+    console.log(totalExpenses)
     
     const completeHandler =()=>{
         navigate("/updateProfile")
@@ -16,9 +24,12 @@ const Dashboard = () => {
 
     const submitHandler= async(e)=>{
         e.preventDefault();
+
         if(editingExpense){
-            console.log(editingExpense)
-            const editData =async()=>{
+            // console.log(editingExpense)
+            const editData =async(category,amount,description)=>{
+
+                console.log(category,amount,description)
                 try {
                     const response = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${editingExpense.id}.json`,{
                         method:"PATCH",
@@ -26,27 +37,37 @@ const Dashboard = () => {
                             "Content-Type": "application/json",
                         },
                         body:JSON.stringify({
-                            category:category.current.value,
-                            amount:amount.current.value,
-                            description:description.current.value
+                            category:category,
+                            amount:amount,
+                            description:description
                         })
                     })
     
                     if(!response.ok){
                         alert("error in updating data");
                     }
+
+          
+                 
+                    console.log(category,amount,description)
                     setEditingExpense(null);
+                    dispatch(setExpense({
+                        id:editingExpense.id,
+                        category:category,
+                        amount:amount,
+                        description:description
+                    }))
                     getData();
     
                 } catch (error) {
                     console.error("Error",error);
                 }
             }
-            editData(category,amount,description)
+            editData(category.current.value,amount.current.value,description.current.value)
         }else{
             const sendData = async (expenseAmount,expenseDescription,expenseCategory)=>{
 
-                console.log(expenseAmount,expenseAmount,expenseDescription)
+                console.log(expenseAmount,expenseCategory,expenseDescription)
                     try {
                         const response = await fetch('https://expense-tracker-65763-default-rtdb.firebaseio.com/expense.json',{
                             method:"POST",
@@ -65,7 +86,9 @@ const Dashboard = () => {
                         }
                 
                         const data = await response.json();
-                        console.log(data)
+                        // console.log(data)
+                    dispatch(addExpense({expenseAmount,expenseCategory,expenseDescription}))
+
                         getData()
                     } catch (error) {
                         console.error("Error",error)

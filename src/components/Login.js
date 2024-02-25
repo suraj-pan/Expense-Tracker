@@ -1,13 +1,22 @@
 import React, { useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {AuthContext } from '../store/Auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../store/AuthSlice';
 
 const Login = () => {
 
     const email = useRef();
     const password = useRef();
     const navigate = useNavigate();
-    const authCtx = useContext(AuthContext);
+    // const authCtx = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
+    const token = useSelector(state=>state.auth.token);
+
+   
+
+    console.log(isLoggedIn,token)
 
     const submitHandler =(e)=>{
 
@@ -35,7 +44,10 @@ const Login = () => {
                     if(response.ok){
                         navigate("/dashboard")
                         console.log(data.email,data.idToken)
-                       authCtx.login(data.email,data.idToken)
+                        let idToken = data.idToken;
+                        let email = data.email;
+                    //    authCtx.login(data.email,data.idToken)
+                    dispatch(login({idToken,email}))
                     }
     
     
