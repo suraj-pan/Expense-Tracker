@@ -3,6 +3,7 @@ import AuthReducer from "./AuthSlice";
 import ExpenseReducer from "./ExpenseSlice";
 import PremiumReducer from "./PremiumSlice";
 import ThemeReducer from "./ThemeSlice";
+import CartReducer from './CartSlice'
 
 
 
@@ -11,7 +12,8 @@ const store = configureStore({
         auth:AuthReducer,
         expenses:ExpenseReducer,
         premium:PremiumReducer,
-        theme:ThemeReducer
+        theme:ThemeReducer,
+        cart:CartReducer
     }
 })
 

@@ -17,7 +17,8 @@ const ExpenseSlice = createSlice({
         },
         downloadexpenses: (state) => {
             console.log(state.expenses)
-            const csvData = state.expenses.map(expense => `${expense.title},${expense.amount},${expense.description}`).join('/n');
+            const csvData = state.expenses.map(expense => `${expense. expenseAmount},${expense.expenseCategory},${expense.expenseDescription}`).join('/n');
+            console.log(csvData)
             const blob = new Blob([csvData], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
 

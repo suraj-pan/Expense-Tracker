@@ -7,6 +7,8 @@ import Dashboard from "./components/Dashboard";
 import UpdateProfile from "./components/UpdateProfile";
 import ForgetPage from "./components/ForgetPage";
 import { useSelector } from "react-redux";
+import Product from "./components/Product";
+import CartPage from "./components/CartPage";
 
 
 
@@ -26,7 +28,9 @@ function App() {
         element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
       />
     <Route path="/signUp" element={<SignUp/>} />
+    <Route path="/product" element={<Product/>} />
     <Route path="/updateProfile" element={<UpdateProfile/>} />
+    <Route path="/cart" element={<CartPage/>} />
     <Route path="/dashboard" element={<Dashboard/>} />
     <Route path="/login" element={ <Login/>} />
     <Route path="/forgetPage" element={ <ForgetPage/>} />

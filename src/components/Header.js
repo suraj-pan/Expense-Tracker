@@ -7,6 +7,8 @@ import { toggleTheme } from '../store/ThemeSlice';
 import { downloadexpenses } from '../store/ExpenseSlice';
 import { MdDarkMode } from "react-icons/md";
 import { FaCloudDownloadAlt } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+import { toggleCartVisibility } from '../store/CartSlice';
 
 
 const Header = () => {
@@ -18,7 +20,7 @@ const Header = () => {
   const expenses = useSelector(state=>state.expenses.expenses);
   console.log(expenses)
   const totalExpenses = expenses.reduce((total,expense)=> total + Number(expense.expenseAmount) ,0)
-  const darkMode = useSelector(state=>state.theme.darkMode)
+  
 
   const logoutHandler =()=>{
     // authCtx.logout()
@@ -32,6 +34,12 @@ const Header = () => {
 
   const handleDownloadexpenses =()=>{
     dispatch(downloadexpenses());
+
+  }
+
+  const handlecart =()=>{
+    dispatch(toggleCartVisibility())
+    navigate("/cart")
   }
 
   
@@ -43,6 +51,7 @@ const Header = () => {
         <NavLink  to='/login' >Login</NavLink>
         <NavLink to="/signUp">SignUp</NavLink>
         <NavLink to="/dashboard">Dashboard</NavLink>
+        <NavLink to="/product">Product</NavLink>
         {totalExpenses > 10000 && (
           <button>Activate Premium </button>
         )}
@@ -50,6 +59,8 @@ const Header = () => {
 
         <button onClick={handleThemeMode} ><MdDarkMode /></button>
         <button onClick={handleDownloadexpenses} ><FaCloudDownloadAlt /></button>
+        <button onClick={handlecart} ><FaShoppingCart /></button>
+
         <button onClick={logoutHandler} >logout</button>
         </div>)}
       </div>
