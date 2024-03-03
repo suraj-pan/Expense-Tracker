@@ -1,4 +1,5 @@
 import { Route, Router,Routes,Navigate } from "react-router-dom";
+import {NotificationContainer} from 'react-notifications';
 import "./App.css";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
@@ -20,7 +21,7 @@ function App() {
   console.log(theme)
   return (
     <div className={`w-[90%] mx-auto h-full ${theme ? 'bg-black text-white':'bg-white text-black'}`}>
-    
+          <NotificationContainer/>
     <Header/>
     <Routes>
     <Route
@@ -35,6 +36,7 @@ function App() {
     <Route path="/login" element={ <Login/>} />
     <Route path="/forgetPage" element={ <ForgetPage/>} />
       </Routes>
+
     </div>   
   );
 }
