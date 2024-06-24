@@ -41,14 +41,14 @@ const ForgetPage = () => {
     }
 
     return (
-        <div>
-            <h3>Forget Password Page to login to This expense Tracker</h3>
-            <form onSubmit={submitHandler} >
-                <label>
+        <div className='flex flex-col h-screen justify-center items-center '>
+            <h3 className='text-3xl mb-2'>Forget Password Page to login to This expense Tracker</h3>
+            <form onSubmit={submitHandler} className='flex flex-col items-center' >
+                <label className='text-2xl mb-4 flex flex-col'>
                     Enter your E-mail to get a new password
-                    <input type='text' ref={email} />
+                    <input type='text ' className='border border-gray-300 bg-gray-100' ref={email} />
                 </label>
-                <button>submit</button>
+                <button className='bg-blue-300 w-[420px] rounded-md text-lg'>submit</button>
             </form>
         </div>
     )

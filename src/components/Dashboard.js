@@ -12,10 +12,13 @@ const Dashboard = () => {
     const [Data,setdata]= useState([]);
     const [editingExpense,setEditingExpense] = useState(null);
     const dispatch = useDispatch();
-  
+    const mail = useSelector(state=>state.auth.userId)
+    console.log( mail)
+  const email = mail.split("@")[0]
+    
+   
 
-
-
+    
     
     const completeHandler =()=>{
         navigate("/updateProfile")
@@ -28,10 +31,10 @@ const Dashboard = () => {
             // console.log(editingExpense)
             const editData =async(category,amount,description)=>{
 
-                console.log(category,amount,description)
+                console.log(category,amount,description,editingExpense.id)
                 try {
-                    const response = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${editingExpense.id}.json`,{
-                        method:"PATCH",
+                    const response = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${email}/${editingExpense.id}.json`,{
+                        method:"PUT",
                         headers:{
                             "Content-Type": "application/json",
                         },
@@ -68,7 +71,7 @@ const Dashboard = () => {
 
                 console.log(expenseAmount,expenseCategory,expenseDescription)
                     try {
-                        const response = await fetch('https://expense-tracker-65763-default-rtdb.firebaseio.com/expense.json',{
+                        const response = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${email}.json`,{
                             method:"POST",
                             headers:{
                                 "Content-Type":"application/json"
@@ -103,12 +106,15 @@ const Dashboard = () => {
 
     const getData = async()=>{
        try {
-        const response = await fetch("https://expense-tracker-65763-default-rtdb.firebaseio.com/expense.json");
+        const response = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${email}.json`);
 
         const data = await response.json()
-        // console.log(Object.entries(data).map(([id,data])=>({id,...data})) )
+        let convertedData = []
+        if(data){
+          convertedData=  Object.entries(data).map(([id,data])=>({id,...data}))
+        }
 
-        setdata(Object.entries(data).map(([id,data])=>({id,...data})))
+        setdata(convertedData || [])
 
        } catch (error) {
         console.error("error",error)
@@ -125,7 +131,7 @@ const Dashboard = () => {
     const deleteHandler = async (id)=>{
             console.log(id)
           try {
-            const deleteData = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${id}.json`,{
+            const deleteData = await fetch(`https://expense-tracker-65763-default-rtdb.firebaseio.com/expense/${email}/${id}.json`,{
                 method:"DELETE",});
 
                 if(deleteData.ok){
@@ -141,7 +147,7 @@ const Dashboard = () => {
 
     const editExpense =(expense)=>{
 
-        // console.log(expense)
+        console.log(expense)
         amount.current.value = expense.amount;
         description.current.value = expense.description;
         category.current.value= expense.category;
@@ -151,58 +157,86 @@ const Dashboard = () => {
     }
 
     return (
-        <div className='flex pt-5 justify-center items-center mx-auto flex-col gap-2 '>
-            <div>
-                <h2 className='text-3xl'>Welcome to the Board</h2>
+       
+        <div className="relative flex pt-5 justify-center items-center w-full mx-auto flex-col gap-2 p-8 ">
+        <div className="absolute top-0 right-1 mt-2">
+            <div className="flex gap-2">
+                <h3 className="text-sm">Your Profile is incomplete</h3>
+                <button className="bg-blue-200 px-2 py-1 rounded-md text-xs" onClick={completeHandler}>Complete Now</button>
             </div>
-            <div className='flex gap-2'>
-                <h3>Your Profile is incomplete</h3>
-                <button className='bg-slate-800 text-white px-3 py-1 rounded-md' onClick={completeHandler} >Complete Now</button>
-            </div>
-            <div className='mt-4 mb-6'>
-                <h3 className=' text-center text-2xl'>Daily Expense Tracker</h3>
-                <div>
-                    <h4>Please enter the value of your daily expenses as you like</h4>
-                    <form className='flex flex-col gap-2' onSubmit={submitHandler} >
-                        <label>
-                            Amount:
-                        <input type='number' ref={amount} placeholder='enter the amount' />
-                        </label>
-                        <label>
-                            Description:
-                        <textarea type='text' ref={description} placeholder='enter the description' />
-                        </label>
-                        <label>
-                          Choose a  Category:
-                            <select name='category' ref={category} >
-                                <option value="food">Food</option>
-                                <option value="petrol">Petrol</option>
-                                <option value="bill">Bill</option>
-                                <option value="clothes">Clothes</option>
-                            </select>
-                        </label>
-                        <button type='submit' className='bg-slate-900 rounded-md text-white'>submit</button>
-                    </form>
-                </div>
-            </div>
-         <div>
-         <h3 className='text-2xl'>Your expense Data :</h3>
-         {Data.length > 0 ?(
-            Data.map((expense,index)=>(
-                <div key={index} className='flex gap-3'>
-                    <div>{expense.category}</div>
-                    <div>{expense.description}</div>
-                    <div>{expense.amount}</div>
-                    <div className='flex gap-2'>
-                        <button onClick={()=>editExpense(expense)} >Edit</button>
-                        <button onClick={()=>deleteHandler(expense.id)} >Delete</button>
-                    </div>
-                </div>
-            ))
-         ):(<div>No data available here...</div>)}
-         </div>
-          
         </div>
+        <div>
+            <h2 className="text-3xl text-center">Welcome to the Board</h2>
+        </div>
+    
+        <div className="mt-4 mb-6 border border-blue-900 rounded-lg p-6 bg-white shadow-lg w-full max-w-md">
+            <h3 className="text-center text-2xl mb-4 text-black">Daily Expense Tracker</h3>
+            <div>
+                <h4 className="mb-4 text-black">Please enter the value of your daily expenses as you like</h4>
+                <form className="flex flex-col gap-4" onSubmit={submitHandler}>
+                    <div className="flex flex-col">
+                        <label className="text-sm text-black">Amount:</label>
+                        <input
+                            type="number"
+                            ref={amount}
+                            placeholder="Enter the amount"
+                            className={`border border-gray-300 rounded-md p-2 text-gray-900`}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="text-sm text-black">Description:</label>
+                        <textarea
+                            type="text"
+                            ref={description}
+                            placeholder="Enter the description"
+                            className="border border-gray-300 rounded-md p-2 text-gray-900"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="text-sm text-black">Choose a Category:</label>
+                        <select name="category" ref={category} className="border border-gray-300 rounded-md p-2 text-gray-900">
+                            <option value="food">Food</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="bill">Bill</option>
+                            <option value="clothes">Clothes</option>
+                        </select>
+                    </div>
+                    <button type="submit" className="bg-slate-900 text-white rounded-md p-2 hover:bg-slate-800 focus:outline-none">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    
+        <div className="w-full max-w-md">
+            <h3 className="text-2xl mb-2 text-center">Your expense Data :</h3>
+            {Data.length > 0 ? (
+                Data.map((expense, index) => (
+                    <div key={index} className="border border-gray-300 rounded-md p-3 mb-3 flex items-center justify-between bg-white shadow-md">
+                        <div className="flex flex-col sm:flex-row gap-3 text-black">
+                            <div>{expense.category}</div>
+                            <div>{expense.description}</div>
+                            <div>{expense.amount}</div>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={() => editExpense(expense)} className="bg-green-500 text-white rounded-md p-2 hover:bg-green-600 focus:outline-none">
+                                Edit
+                            </button>
+                            <button onClick={() => deleteHandler(expense.id)} className="bg-red-500 text-white rounded-md p-2 hover:bg-red-600 focus:outline-none">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <div className="text-center">No data available here...</div>
+            )}
+        </div>
+    </div>
+    
+        
+        
+        
     )
 }
 

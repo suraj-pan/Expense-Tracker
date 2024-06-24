@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { json, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../store/Auth';
+import { useSelector } from 'react-redux';
 
 const UpdateProfile = () => {
 
-    const authCtx = useContext(AuthContext);
+    const authCtx = useSelector(state =>state.auth.isLoggedIn);
     const fullName = useRef();
     const photoUrl = useRef();
     const navigate = useNavigate()
@@ -140,27 +141,47 @@ const UpdateProfile = () => {
         navigate("/dashboard")
     }
     return (
-        <div className='flex flex-col gap-3'>
-            <div className='flex  justify-between' >
-                <h3>Contact Details</h3>
-                <button onClick={cancelHandler} >cancel</button>
+        <div className="flex flex-col gap-3 p-4 md:w-1/2 mx-auto">
+        <div className="flex justify-between items-center">
+          <h3>Contact Details</h3>
+          <button onClick={cancelHandler} className="text-blue-500 hover:text-blue-700">Cancel</button>
+        </div>
+        <div>
+          <form onSubmit={submitHandler} className="flex flex-col gap-4">
+            <div>
+              <label className="text-sm">
+                Full Name:
+                <input
+                  type="text"
+                  value={""}
+                  onChange={handleFullName}
+                  className="border border-gray-300 rounded-md p-2 w-full"
+                />
+              </label>
             </div>
             <div>
-                <form onSubmit={submitHandler} >
-                    <label>
-                        Full Name:
-                        <input type='text' onChange={handleFullName} value={authCtx.token ? userData.displayName : ""} ref={fullName} />
-                    </label>
-                    <label>
-                        Profile Photo  URL:
-                        <input type='text' onChange={handleProfilePhoto} value={authCtx.token ? userData.photoUrl : ""} ref={photoUrl} />
-                    </label>
-                    <button>Update</button>
-                </form>
+              <label className="text-sm">
+                Profile Photo URL:
+                <input
+                  type="text"
+                  value={""}
+                  onChange={handleProfilePhoto}
+                  className="border border-gray-300 rounded-md p-2 w-full"
+                />
+              </label>
             </div>
-            <div><button onClick={()=>verifyEmailHandler(authCtx.token)} >Verify Email</button></div>
-
+            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white rounded-md py-2 px-4">
+              Update
+            </button>
+          </form>
         </div>
+        <div>
+          <button onClick={verifyEmailHandler} className="bg-blue-500 hover:bg-blue-700 text-white rounded-md py-2 px-4">
+            Verify Email
+          </button>
+        </div>
+      </div>
+  
     )
 }
 

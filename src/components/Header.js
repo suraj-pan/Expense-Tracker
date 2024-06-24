@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { AuthContext } from '../store/Auth'
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/AuthSlice';
 import { toggleTheme } from '../store/ThemeSlice';
@@ -16,10 +15,10 @@ const Header = () => {
   // const authCtx = useContext(AuthContext);
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const token = useSelector((state)=>state.auth.token)
+  const token = useSelector((state)=>state.auth.isLoggedIn)
   const expenses = useSelector(state=>state.expenses.expenses);
-  console.log(expenses)
-  const totalExpenses = expenses.reduce((total,expense)=> total + Number(expense.expenseAmount) ,0)
+  // console.log(token)
+  // const totalExpenses = expenses.reduce((total,expense)=> total + Number(expense.expenseAmount) ,0)
   
 
   const logoutHandler =()=>{
@@ -48,18 +47,22 @@ const Header = () => {
     <div className='flex justify-between bg-slate-300 py-2'>
       <div>Expense Tracker</div>
       <div className='flex justify-between gap-3'>
-        <NavLink  to='/login' >Login</NavLink>
+      {!token && (
+       <>
+       <NavLink  to='/login' >Login</NavLink>
         <NavLink to="/signUp">SignUp</NavLink>
-        <NavLink to="/dashboard">Dashboard</NavLink>
-        <NavLink to="/product">Product</NavLink>
-        {totalExpenses > 10000 && (
+       </>
+      )}
+      
+        {/* {totalExpenses > 10000 && (
           <button>Activate Premium </button>
-        )}
-      {token && (  <div>
-
+        )} */}
+      {token && (  <div className='flex gap-2'>
+      <NavLink to="/dashboard">Dashboard</NavLink>
+        {/* <NavLink to="/product">Product</NavLink> */}
         <button onClick={handleThemeMode} ><MdDarkMode /></button>
         <button onClick={handleDownloadexpenses} ><FaCloudDownloadAlt /></button>
-        <button onClick={handlecart} ><FaShoppingCart /></button>
+        {/* <button onClick={handlecart} ><FaShoppingCart /></button> */}
 
         <button onClick={logoutHandler} >logout</button>
         </div>)}

@@ -8,8 +8,8 @@ import Dashboard from "./components/Dashboard";
 import UpdateProfile from "./components/UpdateProfile";
 import ForgetPage from "./components/ForgetPage";
 import { useSelector } from "react-redux";
-import Product from "./components/Product";
-import CartPage from "./components/CartPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 
 
@@ -18,26 +18,22 @@ function App() {
   const theme = useSelector((state)=>state.theme.darkMode);
   const isAuthenticated = useSelector((state)=>state.auth.token)
 
-  console.log(theme)
   return (
-    <div className={`w-[90%] mx-auto h-full ${theme ? 'bg-black text-white':'bg-white text-black'}`}>
-          <NotificationContainer/>
-    <Header/>
-    <Routes>
-    <Route
-        path="/"
-        element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
-      />
-    <Route path="/signUp" element={<SignUp/>} />
-    <Route path="/product" element={<Product/>} />
-    <Route path="/updateProfile" element={<UpdateProfile/>} />
-    <Route path="/cart" element={<CartPage/>} />
-    <Route path="/dashboard" element={<Dashboard/>} />
-    <Route path="/login" element={ <Login/>} />
-    <Route path="/forgetPage" element={ <ForgetPage/>} />
+    <div className={`min-h-screen ${theme ? 'bg-gradient-to-r from-gray-800 to-black text-white' : 'bg-gradient-to-r from-white to-green-100 text-black'} transition-colors duration-300`}>
+    <NotificationContainer />
+    <Header />
+    <main className="w-[90%] mx-auto py-6">
+      <Routes>
+        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+        <Route path="/signUp" element={<SignUp />} />
+            <Route path="/updateProfile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+     
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgetPage" element={<ProtectedRoute><ForgetPage /></ProtectedRoute>} />
       </Routes>
-
-    </div>   
+    </main>
+  </div>  
   );
 }
 

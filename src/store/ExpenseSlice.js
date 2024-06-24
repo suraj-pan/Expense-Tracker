@@ -7,13 +7,13 @@ const ExpenseSlice = createSlice({
     },
     reducers: {
         addExpense: (state, action) => {
-       
+            console.log(action)
             state.expenses.push(action.payload)
-            console.log(action.payload)
+            console.log(state)
         },
         setExpense: (state, action) => {
             state.expenses = action.payload;
-            console.log(action)
+            console.log(state)
         },
         downloadexpenses: (state) => {
             console.log(state.expenses)

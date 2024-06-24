@@ -1,6 +1,5 @@
 import React, { useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
-import {AuthContext } from '../store/Auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/AuthSlice';
 
@@ -69,20 +68,48 @@ const Login = () => {
 
     
   return (
-    <div>
-      <h2>Login </h2>
-      <form onSubmit={submitHandler}>
-        <label> Email
-            <input type='email' ref={email} placeholder='Enter your Email' required />
-        </label>
-        <label> Password
-            <input type='password' ref={password} placeholder='Enter your password' required />
-        </label>
-        <button type='button'onClick={forgetPasswordHandler} >forgot password?</button>
-        <button type='submit'>Submit</button>
-      </form>
-
+    <div className="flex flex-col  items-center justify-center h-screen ">
+    <h2 className='text-2xl mb-3 font-semibold text-blue-900'>Login</h2>
+    <form onSubmit={submitHandler} className=" max-w-md bg-white p-8 rounded-md shadow-md">
+        <div className="flex flex-col">
+            <label className="mb-1 text-blue-300">Email</label>
+            <input
+                type="email"
+                ref={email}
+                placeholder="Enter your Email"
+                className="border border-gray-300 rounded-md p-2 w-[300px]"
+                required
+            />
+        </div>
+        <div className="flex flex-col">
+            <label className=" text-sm text-blue-300">Password</label>
+            <input
+                type="password"
+                ref={password}
+                placeholder="Enter your password"
+                className="border border-gray-300 rounded-md p-2 w-[300px]"
+                required
+            />
+        </div>
+    <div className='flex flex-col justify-between'>
+    <button
+            type="button"
+            onClick={forgetPasswordHandler}
+            className="text-blue-500 hover:underline focus:outline-none"
+        >
+            Forgot password?
+        </button>
+        <button
+            type="submit"
+            className="bg-blue-500 mt-3 text-white rounded-md p-2 hover:bg-blue-600 focus:outline-none"
+        >
+            Submit
+        </button>
     </div>
+    </form>
+</div>
+
+
   )
 }
 

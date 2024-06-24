@@ -48,21 +48,49 @@ const SignUp = () => {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center '>
-            <h2 className='text-2xl text-center font-bold' >Sign-Up</h2>
-            <form className='flex flex-col ' onSubmit={submitHandler}>
-                <label>E-mail:
-                    <input type='email' ref={email} placeholder='enter your email' required />
-                </label>
-                <label>Password:
-                    <input type='password' ref={password} placeholder='enter your password' required />
-                </label>
-                <label>Confirm Password:
-                    <input type='password' ref={confirmPassword} placeholder='enter your confirm password' required />
-                </label>
-                <button type='submit' >Submit</button>
-            </form>
-        </div>
+        <div className='flex flex-col justify-center items-center min-h-screen'>
+        <h2 className='text-2xl text-center font-bold mb-5'>Sign-Up</h2>
+        <form className='w-full max-w-md border border-black rounded-md px-4 py-6 bg-gray-100' onSubmit={submitHandler}>
+          <label className='block mb-3'>
+            E-mail:
+            <input
+              type='email'
+              ref={email}
+              placeholder='Enter your email'
+              className='border border-gray-300 rounded-md p-2 mt-1 w-full focus:outline-none'
+              required
+            />
+          </label>
+          <label className='block mb-3'>
+            Password:
+            <input
+              type='password'
+              ref={password}
+              placeholder='Enter your password'
+              className='border border-gray-300 rounded-md p-2 mt-1 w-full focus:outline-none'
+              required
+            />
+          </label>
+          <label className='block mb-3'>
+            Confirm Password:
+            <input
+              type='password'
+              ref={confirmPassword}
+              placeholder='Enter your confirm password'
+              className='border border-gray-300 rounded-md p-2 mt-1 w-full focus:outline-none'
+              required
+            />
+          </label>
+          <button
+            type='submit'
+            className='bg-blue-500 text-white rounded-md p-2 mt-4 w-full cursor-pointer hover:bg-blue-600 focus:outline-none'
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+      
+    
     )
 }
 
